@@ -1,0 +1,35 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "ti,beaglebone", "ti,beaglebone-black", "ti,beaglebone-green";
+    part-number = "LYNXIS-NOSPI";
+    version =  "00A0";
+    exclusive-use = "P9.17", "P9.18", "P9.21", "P9.22";
+
+    fragment@0 {
+        target = <&am33xx_pinmux>;
+        __overlay__ {
+            disabled_pins0: disabled_pins0 {
+                pinctrl-single,pins = <
+                    0x150 0x2f    /* spi0_sclk pin_input mode7 no pullup/down */
+                    0x154 0x2f    /* spi0_d0 pin_input mode7 no pullup/down */
+                    0x158 0x2f   /* spi0_d1 pin_input mode7 no pullup/down */
+                    0x15c 0x2f   /* spi0_cs0 pin_input mode7 no pullup/down */
+                >;
+            };
+        };
+    };
+    fragment@1 {
+        target = <&ocp>;
+        __overlay__ {
+            test_helper: helper {
+                compatible = "bone-pinmux-helper";
+                pinctrl-names = "default";
+                pinctrl-0 = <&disabled_pins0>;
+                status = "okay";
+            };
+        };
+    };
+};
+
